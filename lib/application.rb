@@ -99,10 +99,7 @@ class RandWallpaper
    
     p wallpaper_dir
 
-    wallpaper_path = Dir.glob("#{wallpaper_dir}/**/*.{jpg,JPG,jpeg,JPEG}").sample
-    wallpaper_url = NSURL.fileURLWithPath(wallpaper_path, isDirectory: false)
     workspace = NSWorkspace.sharedWorkspace
-
     NSScreen.screens.each do |screen|
       wallpaper_path = 
         Dir.glob("#{wallpaper_dir}/**/*.{jpg,JPG,jpeg,JPEG}").sample
