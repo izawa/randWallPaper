@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 require 'rubygems' unless deployed?
 require 'hotcocoa'
+framework 'Foundation'
 
 ICON = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'Resources', 'himawari.png'))
 #ICON = NSBundle.mainBundle.resourcePath.fileSystemRepresentation + 'himawari.png'
@@ -10,11 +11,10 @@ class NetWallpaper
   include HotCocoa
 
   def start
-
     @app = application(name: 'NetWallpaper', delegate: self)
     @status = status_item
     set_status_menu()
-
+    load_prefs()
     @app.run()
   end
 
@@ -30,7 +30,7 @@ class NetWallpaper
   def status_menu
     menu(:delegate => self) do |status|
       status.item("Change", :on_action => Proc.new{ change })
-      status.item("TEST", key: "w", :on_action => Proc.new{ test })
+      status.item("TEST", key: "w", :on_action => Proc.new{ config })
       status.separator()
       status.submenu(:menu) do |apple|
         apple.item(:about, :title => "About #{NSApp.name}")
@@ -52,21 +52,47 @@ class NetWallpaper
     end
   end
 
-  def test
-    window frame: [100, 100, 300, 200], title: @app.name, style: [:titled, :closable, :miniaturizable] do |win|
-      win << label(text: 'Hello from HotCocoa', layout: {start: false})
-      win << button(text: 'Ok', on_action: Proc.new { test2 })
+  def config
+    window(frame: [100, 100, 400, 200], title: @app.name) do |win|
+      win << view (frame: [100, 100, 400, 200]) do |v|
+        v << label(text: '画像ディレクトリ', layout: {start: false}, frame: [26, 137, 119, 17])
+        v << @img_path = text_field(text: @img_dir, frame:[29, 107, 282, 22])
+        #v << button(title: 'OK', on_action: Proc.new{  }, frame:[307, 13, 59, 32])
+        v << button(title: '.', on_action: Proc.new{ fsel }, frame:[315, 102, 29,30])
+      #@field.text = "aaa"
+        @img_path.setEditable(nil)
+      end
     end
   end
 
-  def test2
-    print "aaa"
+  def fsel
+    a=NSOpenPanel.openPanel
+    a.setCanChooseFiles(nil)
+    a.setCanChooseDirectories(true)
+    # if a.runModalForDirectory(nil, file:nil) == NSOKButton
+    if a.runModal == NSOKButton
+      @img_path.text = a.URLs[0].path
+      @img_dir = a.URLs[0].path
+      user_defaults.setObject(a.URLs[0].path, forKey:'img_dir')
+      user_defaults.synchronize
+    end
+  end
+
+  def load_prefs
+    unless user_defaults.objectForKey('img_dir')
+      user_defaults.setObject(File.expand_path("~/Pictures"), forKey:'img_dir' )
+      p user_defaults.synchronize
+    end
+    @img_dir = user_defaults.objectForKey('img_dir')
   end
 
 
-
   def change
-    wallpaper_dir = File.expand_path("~/myphotos")
+    #wallpaper_dir = File.expand_path("~/myphotos")
+    wallpaper_dir = @img_dir
+   
+    p wallpaper_dir
+
     wallpaper_path = Dir.glob("#{wallpaper_dir}/**/*.{jpg,JPG,jpeg,JPEG}").sample
     wallpaper_url = NSURL.fileURLWithPath(wallpaper_path, isDirectory: false)
     workspace = NSWorkspace.sharedWorkspace
