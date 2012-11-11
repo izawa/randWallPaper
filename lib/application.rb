@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 require 'rubygems' unless deployed?
 require 'hotcocoa'
-framework 'Foundation'
 
-ICON = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'Resources', 'himawari.png'))
+ICON = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'Resources', 'Himawari.png'))
 #ICON = NSBundle.mainBundle.resourcePath.fileSystemRepresentation + 'himawari.png'
 ICON2 =  ICON
 
@@ -23,7 +22,7 @@ class RandWallpaper
     @status.menu = @menu
     # @status.title = "Hello" # アイコンの横にタイトルを付ける
     @status.image = image(:file => ICON, :size => [ 20, 20 ])           if(File.exists?(ICON))
-    @status.alternateImage = image(:file => ICON2, :size => [ 40, 40 ]) if(File.exists?(ICON2))
+    @status.alternateImage = image(:file => ICON2, :size => [ 20, 20 ]) if(File.exists?(ICON2))
     #@status.setHighlightMode(true)
   end
 
