@@ -7,11 +7,11 @@ ICON = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'Resources
 #ICON = NSBundle.mainBundle.resourcePath.fileSystemRepresentation + 'himawari.png'
 ICON2 =  ICON
 
-class NetWallpaper
+class RandWallpaper
   include HotCocoa
 
   def start
-    @app = application(name: 'NetWallpaper', delegate: self)
+    @app = application(name: 'RandWallpaper', delegate: self)
     @status = status_item
     set_status_menu()
     load_prefs()
@@ -53,7 +53,8 @@ class NetWallpaper
   end
 
   def config
-    window(frame: [100, 100, 400, 200], title: @app.name) do |win|
+    window(frame: [100, 100, 400, 200], title: @app.name + ' Configuration',
+      style: [:titled, :closable, :miniaturizable]) do |win|
       win << view (frame: [100, 100, 400, 200]) do |v|
         v << label(text: '画像ディレクトリ', layout: {start: false}, frame: [26, 137, 119, 17])
         v << @img_path = text_field(text: @img_dir, frame:[29, 107, 282, 22])
@@ -111,4 +112,4 @@ class NetWallpaper
 end
 
 
-NetWallpaper.new.start
+RandWallpaper.new.start
