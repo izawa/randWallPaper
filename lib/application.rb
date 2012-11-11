@@ -2,8 +2,14 @@
 require 'rubygems' unless deployed?
 require 'hotcocoa'
 
-ICON = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'Resources', 'Himawari.png'))
-#ICON = NSBundle.mainBundle.resourcePath.fileSystemRepresentation + 'himawari.png'
+
+if deployed?
+  ICON = '/Applications' + File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'Resources', 'Himawari.png'))
+
+else
+  ICON = File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'Resources', 'Himawari.png'))
+end
+#ICON = NSBundle.mainBundle.resourcePath.fileSystemRepresentation + 'Himawari.png'
 ICON2 =  ICON
 
 class RandWallpaper
@@ -100,12 +106,14 @@ class RandWallpaper
     NSScreen.screens.each do |screen|
       wallpaper_path = 
         Dir.glob("#{wallpaper_dir}/**/*.{jpg,JPG,jpeg,JPEG}").sample
-      wallpaper_url = NSURL.fileURLWithPath(wallpaper_path, isDirectory: false)
-      workspace.setDesktopImageURL(
-        wallpaper_url, 
-        forScreen:screen, 
-        options:nil, 
-        error:nil)
+      if wallpaper_path != nil
+        wallpaper_url = NSURL.fileURLWithPath(wallpaper_path, isDirectory: false)
+        workspace.setDesktopImageURL(
+          wallpaper_url, 
+          forScreen:screen, 
+          options:nil, 
+          error:nil)
+      end
     end
   end
 end
