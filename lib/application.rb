@@ -53,7 +53,7 @@ class RandWallpaper
 
   def config
     window(frame: [100, 100, 400, 200], title: @app.name + ' Configuration',
-      style: [:titled, :closable, :miniaturizable]) do |win|
+      style: [:titled, :closable]) do |win|
       win << view (frame: [100, 100, 400, 200]) do |v|
         v << label(text: '画像ディレクトリ', layout: {start: false}, frame: [26, 137, 119, 17])
         v << @img_path = text_field(text: @img_dir, frame:[29, 107, 282, 22])
