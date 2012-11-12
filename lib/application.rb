@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 require 'rubygems' unless deployed?
 require 'hotcocoa'
-
+require 'pp'
 
 if deployed?
   ICON = '/Applications' + File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'Resources', 'Himawari.png'))
@@ -35,12 +35,11 @@ class RandWallpaper
   def status_menu
     menu(:delegate => self) do |status|
       status.item("Change", :on_action => Proc.new{ change })
-      status.item("TEST", key: "w", :on_action => Proc.new{ config })
       status.separator()
       status.submenu(:menu) do |apple|
         apple.item(:about, :title => "About #{NSApp.name}")
         apple.separator()
-        apple.item(:preferences, :key => ",").setState(NSOnState) # チェックを付ける
+        apple.item(:preferences, :key => ",", :on_action => Proc.new{ config } )
         apple.separator()
         apple.submenu(:services)
         apple.separator()
@@ -52,8 +51,6 @@ class RandWallpaper
       end
       status.separator()
       status.item("Quit", :key => "q", :on_action => Proc.new { @app.terminate(self) })
-      status.separator()
-      status.item("#{ICON}",  :on_action => Proc.new { @app.terminate(self) })
     end
   end
 
@@ -61,12 +58,16 @@ class RandWallpaper
     window(frame: [100, 100, 400, 200], title: @app.name + ' Configuration',
       style: [:titled, :closable]) do |win|
       win << view (frame: [100, 100, 400, 200]) do |v|
-        v << label(text: '画像ディレクトリ', layout: {start: false}, frame: [26, 137, 119, 17])
-        v << @img_path = text_field(text: @img_dir, frame:[29, 107, 282, 22])
-        #v << button(title: 'OK', on_action: Proc.new{  }, frame:[307, 13, 59, 32])
-        v << button(title: '.', on_action: Proc.new{ fsel }, frame:[315, 102, 29,30])
-      #@field.text = "aaa"
+        v << label(text: '画像ディレクトリ', layout: {start: false}, frame: [26,156, 119, 17])
+        v << @img_path = text_field(text: @img_dir, frame:[29, 123, 282, 22])
         @img_path.setEditable(nil)
+        v << button(title: '.', on_action: Proc.new{ fsel }, frame:[315, 120, 29,30])
+        v << label(text: '自動切り替え時間', layout: {start: false}, frame: [26,73, 228, 17])
+        v << @slider = slider(frame: [27, 47, 286, 21])
+        @slider.setMaxValue(3600)
+        @slider.setMinValue(0)
+        @slider.setNumberOfTickMarks(13)
+        @slider.setAllowsTickMarkValuesOnly(true)
       end
     end
   end
@@ -113,6 +114,32 @@ class RandWallpaper
       end
     end
   end
+
+
+  # file/open
+  def on_open(menu)
+  end
+
+  # file/new
+  def on_new(menu)
+  end
+
+  # help menu item
+  def on_help(menu)
+  end
+
+  # This is commented out, so the minimize menu item is disabled
+  #def on_minimize(menu)
+  #end
+
+  # window/zoom
+  def on_zoom(menu)
+  end
+
+  # window/bring_all_to_front
+  def on_bring_all_to_front(menu)
+  end
+
 end
 
 
