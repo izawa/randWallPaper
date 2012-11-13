@@ -61,10 +61,11 @@ class RandWallpaper
         @img_path.setEditable(nil)
         v << button(title: '.', on_action: Proc.new{ fsel }, frame:[315, 120, 29,30])
         v << label(text: '自動切り替え時間', layout: {start: false}, frame: [26,73, 228, 17])
-        #v << @slider = slider(max: 3600, min: 0, tic_marks: 13, frame: [27, 47, 315, 21], on_action: Proc.new {|sec| change_interval(sec) })
         v << @slider = slider(max: 3600, min: 0, tic_marks: 13, frame: [27, 47, 315, 21], on_action: Proc.new {|sec| change_interval(sec) })
+        #v << @slider = slider(max: 26, min: 0, tic_marks: 13, frame: [27, 47, 315, 21], on_action: Proc.new {|sec| change_interval(sec) })
         @slider.setAllowsTickMarkValuesOnly(true)
         @slider.setFloatValue(@interval)
+        @slider.setContinuous(nil)
 
         v << label(text: 'なし', frame:[23, 25, 46, 17], font: font(name: "Tahoma", size: 9))
         5.step(60, 5) { |min|
@@ -75,22 +76,22 @@ class RandWallpaper
   end
 
   def change_interval(sec)
-    p sec.to_i
     user_defaults.setObject(sec.to_i, forKey: 'interval')
     user_defaults.synchronize
     start_timer(sec.to_i)
   end
 
   def start_timer(sec)
-    puts "start_time #{sec}"
-
     if sec != 0
-      @timer = timer(interval: sec, target: self, selector: "change:",
-        info: nil, repeats: true)
+      @timer.invalidate
+      @timer = NSTimer.scheduledTimerWithTimeInterval(
+        sec,
+        target: self, 
+        selector: "change",
+        userInfo: nil, 
+        repeats: true)
     else
-      if @timer
-        @timer.invalidate
-      end
+      @timer.invalidate
     end
   end
 
@@ -118,8 +119,16 @@ class RandWallpaper
       user_defaults.synchronize
     end
     @interval = user_defaults.objectForKey('interval')
-    p @interval
-    #start_timer(@interval)
+
+    @timer = NSTimer.scheduledTimerWithTimeInterval(
+      999,
+      target: self, 
+      selector: "test",
+      userInfo: nil, 
+      repeats: true)
+    @timer.invalidate
+
+    start_timer(@interval)
   end
 
   def change
