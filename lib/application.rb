@@ -79,6 +79,7 @@ class RandWallpaper
   end
 
   def change_interval(sec)
+    @interval = sec.to_i
     user_defaults.setObject(sec.to_i, forKey: 'interval')
     user_defaults.synchronize
     start_timer(sec.to_i)
