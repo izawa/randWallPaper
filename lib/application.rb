@@ -56,7 +56,7 @@ class RandWallpaper
     main_screen = NSScreen.mainScreen.visibleFrame
     window(
       frame: [(main_screen.size.width-400)/2, (main_screen.size.height-100)/2,
-        400, 200], title: @app.name + ' Configuration',
+        400, 200], title: @app.name + ' Preferences',
       style: [:titled, :closable]) do |win|
       win << view (frame: [100, 100, 400, 200]) do |v|
         v << label(text: '画像ディレクトリ', layout: {start: false}, frame: [26,156, 119, 17])
