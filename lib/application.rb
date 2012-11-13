@@ -61,7 +61,8 @@ class RandWallpaper
         @img_path.setEditable(nil)
         v << button(title: '.', on_action: Proc.new{ fsel }, frame:[315, 120, 29,30])
         v << label(text: '自動切り替え時間', layout: {start: false}, frame: [26,73, 228, 17])
-        v << @slider = slider(max: 3600, min: 0, tic_marks: 13, frame: [27, 47, 315, 21], on_action: Proc.new {|sec| set_timeout(sec) })
+        #v << @slider = slider(max: 3600, min: 0, tic_marks: 13, frame: [27, 47, 315, 21], on_action: Proc.new {|sec| change_interval(sec) })
+        v << @slider = slider(max: 3600, min: 0, tic_marks: 13, frame: [27, 47, 315, 21], on_action: Proc.new {|sec| change_interval(sec) })
         @slider.setAllowsTickMarkValuesOnly(true)
         @slider.setFloatValue(@interval)
 
@@ -73,10 +74,24 @@ class RandWallpaper
     end
   end
 
-  def set_timeout(sec)
-    
+  def change_interval(sec)
+    p sec.to_i
     user_defaults.setObject(sec.to_i, forKey: 'interval')
     user_defaults.synchronize
+    start_timer(sec.to_i)
+  end
+
+  def start_timer(sec)
+    puts "start_time #{sec}"
+
+    if sec != 0
+      @timer = timer(interval: sec, target: self, selector: "change:",
+        info: nil, repeats: true)
+    else
+      if @timer
+        @timer.invalidate
+      end
+    end
   end
 
   def fsel
@@ -103,7 +118,8 @@ class RandWallpaper
       user_defaults.synchronize
     end
     @interval = user_defaults.objectForKey('interval')
-
+    p @interval
+    #start_timer(@interval)
   end
 
   def change
