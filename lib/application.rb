@@ -60,8 +60,8 @@ class RandWallpaper
       style: [:titled, :closable]) do |win|
       win << view (frame: [100, 100, 400, 200]) do |v|
         v << label(text: '画像ディレクトリ', layout: {start: false}, frame: [26,156, 119, 17])
-        v << @img_path = text_field(text: @img_dir, frame:[29, 123, 282, 22])
-        @img_path.setEditable(nil)
+        v << @imgpath_field = text_field(text: @img_dir, frame:[29, 123, 282, 22])
+        @imgpath_field.setEditable(nil)
         v << button(title: '.', on_action: Proc.new{ fsel }, frame:[315, 120, 29,30])
         v << label(text: '自動切り替え時間', layout: {start: false}, frame: [26,73, 228, 17])
         v << @slider = slider(max: 3600, min: 0, tic_marks: 13, frame: [27, 47, 315, 21], on_action: Proc.new {|sec| change_interval(sec) })
@@ -104,7 +104,7 @@ class RandWallpaper
     panel.setCanChooseFiles(nil)
     panel.setCanChooseDirectories(true)
     if panel.runModal == NSOKButton
-      @img_path.text = panel.URLs[0].path
+      @imgpath_field.text = panel.URLs[0].path
       @img_dir = panel.URLs[0].path
       user_defaults.setObject(panel.URLs[0].path, forKey: 'img_dir')
       user_defaults.synchronize
