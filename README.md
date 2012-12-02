@@ -1,4 +1,4 @@
-# ransWallPaper
+# randWallPaper
 screen background changer for OSX.
 
 # requirements

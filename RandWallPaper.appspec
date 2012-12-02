@@ -40,7 +40,7 @@ Application::Specification.new do |s|
   # toggle whether the app is an daemon with UI or a regular app
   # You can use this flag to hide the dock icon for the app; the
   # default value is false so that apps will have a dock icon
-  s.agent    = true
+  # s.agent    = true
 
   # uncomment the block below to declare document types for your document-based application
   # you can declare multiple document types by specifying several declare_doc_type blocks

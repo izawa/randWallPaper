@@ -65,7 +65,6 @@ class RandWallpaper
         v << button(title: '.', on_action: Proc.new{ fsel }, frame:[315, 120, 29,30])
         v << label(text: '自動切り替え時間', layout: {start: false}, frame: [26,73, 228, 17])
         v << @slider = slider(max: 3600, min: 0, tic_marks: 13, frame: [27, 47, 315, 21], on_action: Proc.new {|sec| change_interval(sec) })
-        #v << @slider = slider(max: 26, min: 0, tic_marks: 13, frame: [27, 47, 315, 21], on_action: Proc.new {|sec| change_interval(sec) })
         @slider.setAllowsTickMarkValuesOnly(true)
         @slider.setFloatValue(@interval)
         @slider.setContinuous(nil)
